@@ -16,8 +16,8 @@ public class VNode<T> {
         this.name = name;
     }
 
-    public static <T> VNode of(T name) {
-        return new VNode(name);
+    public static <T> VNode<T> of(T name) {
+        return new VNode<>(name);
     }
 
     @Override

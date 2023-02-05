@@ -1,8 +1,14 @@
-package graph;
+package tree;
 
 import java.util.LinkedHashMap;
 
 /**
+ * 哈夫曼树 （最优二叉树） 度为2 WPL带权路径长度最小的树
+ * 是一个二叉树，且深度越大，权值越高
+ * 将非叶子节点的路径编码为为1 通向叶子节点的路径编码为0 （最后一个节点会有两个子节点 分别为0/1）
+ * 将这些路径拼接可以得到一租编码集合，该集合中的编码长度依次增加，且互相不会成为其他编码的前缀，也就是可变前缀编码
+ * 0 / 10/ 111/ 110
+ *
  * @author hzs
  * @date 2022/10/03
  */
@@ -31,6 +37,7 @@ public class HuffmanTree {
         public Node(int weight) {
             this.weight = weight;
         }
+
         public Node(int weight, Node parent, Node lChild, Node rChild) {
             this.weight = weight;
             this.parent = parent;
@@ -50,6 +57,7 @@ public class HuffmanTree {
 
     /**
      * 构造简单的哈夫曼树
+     *
      * @param weights 节点权重&节点值
      * @return 根节点
      */
@@ -67,6 +75,7 @@ public class HuffmanTree {
 
     /**
      * 中序遍历
+     *
      * @param root 根节点
      */
     static void inorder(Node root) {
@@ -81,7 +90,8 @@ public class HuffmanTree {
 
     /**
      * 生成哈夫曼编码
-     * @param root 根节点
+     *
+     * @param root         根节点
      * @param huffmanCodes 需要填充的数组
      */
     static void huffmanCoding(Node root, LinkedHashMap<String, Integer> huffmanCodes) {

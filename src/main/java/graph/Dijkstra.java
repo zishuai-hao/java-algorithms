@@ -3,7 +3,7 @@ package graph;
 import java.util.Arrays;
 
 /**
- * 迪科斯特拉算法 用于计算加权图的最短路径 注意不能有负权边
+ * 迪科斯特拉算法  用于计算加权图的最短路径 注意不能有负权边
  * O(n^2)
  * <p>
  * 使用贪婪算法（question：暂时还不知道什么意思）的思想 来找到最权
@@ -34,7 +34,7 @@ import java.util.Arrays;
  * ------
  * |end|None|
  * <p>
- * 什么需要这两张表呢，第一张表 记录着到达各个节点需要的时间，从起点开始 我们就知道 下图
+ * 什么需要这两张表呢，第一张表 记录根节点着到达各个节点需要的时间，从起点开始 我们就知道 下图
  * |节点|最短路径|是否已经处理|
  * -------------
  * |A|6||
@@ -45,7 +45,7 @@ import java.util.Arrays;
  * <p>
  * dijkstra 算法要求我们这么做：
  * 1. 从起点开始
- * 2. 计算所有邻居的距离更新costs表，然后将其状态置为已处理(确认最短路径)， 然后找到最短的邻居
+ * 2. 计算所有邻居的距离更新costs表，然后将其状态置为已处理(确认最短路径)， 然后找到距离根节点最近的未访问节点
  * 3. 继续进行2 算法（如果没有了 说明搜索结束 退出）
  * <p>
  * 算法要求每次遍历到的节点一定是距离最短的节点
@@ -66,7 +66,8 @@ public class Dijkstra {
         MGraph[4] = new int[]{MAX, 3, 9, 2, MAX};
 
         int startIndex = 0;
-        int[] cost = MGraph[startIndex];
+        // 距离根节点的最短路径
+        int[] cost = Arrays.copyOf(MGraph[startIndex],MGraph.length);
         boolean[] isArrived = new boolean[n];
         int[] parent = new int[n];
         for (int i = 0; i < parent.length; i++) {
@@ -91,9 +92,10 @@ public class Dijkstra {
                     minIndex = i;
                 }
             }
-            // 创建到该节点的路径
+
             isArrived[minIndex] = true;
             System.out.println("当前最近的节点：" + minIndex);
+
             // 更新成本表 看看有没有距离主节点更近的路线
             for (int i = 0; i < cost.length; i++) {
                 if (isArrived[i]) {

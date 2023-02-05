@@ -1,12 +1,10 @@
-package graph;
-
-import java.util.Arrays;
+package util;
 
 /**
  * @author hzs
  * @date 2022/10/14
  */
-public class PrintUtil {
+public class CommonUtil {
     public static  void printMatrix(int[][] matrix) {
         System.out.println("-------start-------");
         for (int[] a : matrix) {
@@ -27,5 +25,11 @@ public class PrintUtil {
             }
         }
         System.out.println("-------end--------");
+    }
+
+    public static void swap(int[] arr, int left, int right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
     }
 }

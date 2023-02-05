@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 /**
  * 储结构：邻接矩阵
- * 广度优先遍历（有向无向）
+ * 广度优先遍历（有向无向）类似于层次遍历，每一次都会把该层的节点遍历完成之后，然后遍历下一层节点
  * 使用一个visited 数组保存访问状态
  * 为了避免多个连通分量以及有向图方向的问题，遍历visited数组，来决定BFS的起始节点
  *
@@ -43,7 +43,7 @@ public class BFS {
             System.out.println(pop);
             // 获取该节点的连接关系
             final int[] connect = mGraph[pop];
-            // 遍历出可到达且未被访问过的节点
+            // 遍历出可到达且未被访问过的节点并且加入队列
             for (int i = 0; i < connect.length; i++) {
                 if (connect[i] != 0 && !visited[i]) {
                     visited[i] = true;

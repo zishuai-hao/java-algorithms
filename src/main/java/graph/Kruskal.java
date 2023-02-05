@@ -3,6 +3,9 @@ package graph;
 import graph.entity.VNode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * 最小生成树
@@ -18,12 +21,37 @@ import java.util.ArrayList;
  */
 public class Kruskal {
 
+    // 并查集
     public static int[] father;
 
-    static class Edge {
+    static class Edge implements Comparable {
         int weight;
         VNode<Integer> start;
         VNode<Integer> end;
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public void setWeight(int weight) {
+            this.weight = weight;
+        }
+
+        public VNode<Integer> getStart() {
+            return start;
+        }
+
+        public void setStart(VNode<Integer> start) {
+            this.start = start;
+        }
+
+        public VNode<Integer> getEnd() {
+            return end;
+        }
+
+        public void setEnd(VNode<Integer> end) {
+            this.end = end;
+        }
 
         public Edge(int weight, VNode<Integer> start, VNode<Integer> end) {
             this.weight = weight;
@@ -34,11 +62,32 @@ public class Kruskal {
         public static Edge of(int weight, VNode<Integer> start, VNode<Integer> end) {
             return new Edge(weight, start, end);
         }
+
+        @Override
+        public int compareTo(Object o) {
+            if (o instanceof Edge) {
+                return Integer.compare(this.weight, ((Edge) o).weight);
+            }
+            return 0;
+        }
+
+
+    }
+
+    public static void main(String[] args) {
+        final ArrayList<Edge> edges = new ArrayList<>();
+        edges.add(Edge.of(1, null, null));
+        edges.add(Edge.of(3, null, null));
+        edges.add(Edge.of(3, null, null));
+
+        Collections.sort(edges);
+
+        System.out.println(edges.stream().map(Edge::getWeight).collect(Collectors.toList()));
+
     }
 
     /**
      * 并查集 找到根节点
-     *
      */
     static int find(int nodeI) {
         if (father[nodeI] != nodeI) {
@@ -49,21 +98,48 @@ public class Kruskal {
 
     /**
      * 并查集 合并树
-     *
      */
-    static int unite(Integer node1, Integer node2) {
+    static void unite(Integer node1, Integer node2) {
         final int node2Fa = find(node2);
-        // 转换父子关系 node2 置顶
-        father[node2Fa] = node2;
-        // 设置n1 作为 n2的爸爸
-        father[node2] = node1;
-        return node2;
+        final int node1Fa = find(node1);
+        // 设置n1的父节点 作为 n2的父节点
+        father[node2Fa] = node1Fa;
     }
 
-    public static void main(String[] args) {
-        int n = 6;
-        final ArrayList<Edge> results = new ArrayList<>(n - 1);
+//    public static void main(String[] args) {
+//        int n = 6;
+//        final ArrayList<Edge> results = new ArrayList<>(n - 1);
+//
+//        final ArrayList<Edge> edges = getEdges();
+//
+//        // 单项父节点表 当表中索引指向其他节点，则表示已经归属于另一个子树 最后一个空间留给生成树
+//        int connect = 0;
+//        father = new int[n];
+//        for (int i = 0; i < father.length; i++) {
+//            // 将自己设置为自己的父节点
+//            father[i] = i;
+//        }
+//
+//        for (final Edge edge : edges) {
+//            // 判断这两个节点是否已经连接 只需要判断他们的父节点是否相同
+//            if (find(edge.start.name) != find(edge.end.name)) {
+//                // 连接这两个节点
+//                unite(edge.start.name, edge.end.name);
+//                results.add(edge);
+//                connect++;
+//                // 判断是否已经组成通路
+//                if (connect == n - 1) {
+//                    break;
+//                }
+//            }
+//        }
+//        for (Edge edge : results) {
+//            System.out.printf("weight:%d  join: %s --> %s; ", edge.weight, edge.start.name, edge.end.name);
+//        }
+//        System.out.println("\r" + Arrays.toString(father));
+//    }
 
+    private static ArrayList<Edge> getEdges() {
         //      initialize data 邻接矩阵懒得写了
         final VNode<Integer> v0 = VNode.of(0);
         final VNode<Integer> v1 = VNode.of(1);
@@ -84,32 +160,7 @@ public class Kruskal {
         edges.add(Edge.of(6, v0, v1));
         edges.add(Edge.of(6, v3, v4));
         edges.add(Edge.of(6, v4, v5));
-
-        // 单项父节点表 当表中索引指向其他节点，则表示已经归属于另一个子树 最后一个空间留给生成树
-        int connect = 0;
-        father = new int[n];
-        for (int i = 0; i < father.length; i++) {
-            // 将自己设置为自己的父节点
-            father[i] = i;
-        }
-        for (final Edge edge : edges) {
-            // 判断这两个节点是否已经连接
-            // 1. 判断这俩节点直接连接，那么必定两人有相同的父节点（a/b）
-            // 2. 或者两个节点间接连接，那么他们的父节点必定为同一个
-            if (find(edge.start.name) != find(edge.end.name)) {
-                // 连接这两个节点
-                unite(edge.start.name, edge.end.name);
-                results.add(edge);
-                connect++;
-                // 判断是否已经组成通路
-                if (connect == n - 1) {
-                    break;
-                }
-            }
-        }
-        for (Edge edge : results) {
-            System.out.printf("weight:%d  join: %s --> %s; ", edge.weight, edge.start.name, edge.end.name);
-        }
+        return edges;
     }
 }
 
